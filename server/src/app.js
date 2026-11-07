@@ -11,12 +11,28 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 
-// Determine client URL
+// Determine client URL for CORS
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+const isProduction = process.env.NODE_ENV === 'production';
 
-// Middleware
+// In production, the frontend is bundled with this server (same origin).
+// We allow localhost:5173 for dev, plus any explicitly configured CLIENT_URL.
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:4173', // vite preview
+  clientUrl,
+];
+
 app.use(cors({
-  origin: [clientUrl, 'http://localhost:5173', 'http://127.0.0.1:5173'],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (Postman, curl, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // In production, same-origin requests arrive without an Origin header,
+    // so the !origin check above covers them.
+    callback(new Error(`CORS: origin '${origin}' not allowed`));
+  },
   credentials: true,
 }));
 

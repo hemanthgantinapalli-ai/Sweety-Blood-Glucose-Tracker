@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// In development: VITE_API_URL is empty → uses '/api' → Vite proxy forwards to http://localhost:5000/api
+// In production:  VITE_API_URL should be set to the full backend URL, e.g. https://my-app.onrender.com/api
+//                 But if frontend is served by the backend (same origin), '/api' still works.
+const baseURL = import.meta.env.VITE_API_URL || '/api';
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },

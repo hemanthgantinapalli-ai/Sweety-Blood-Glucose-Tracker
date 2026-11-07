@@ -1,5 +1,7 @@
 services:
   # Unified Web Service (Backend API + Production React Frontend)
+  # The frontend (client/dist) is served by the Express backend on the same origin.
+  # So no separate CLIENT_URL is needed — same-origin requests don't need CORS headers.
   - type: web
     name: sweety-tracker
     runtime: node
@@ -15,4 +17,8 @@ services:
         value: production
       - key: PORT
         value: 10000
+      # CLIENT_URL is set to the Render service URL (same origin as API in production).
+      # Update this after first deploy with your actual Render URL.
+      - key: CLIENT_URL
+        value: https://sweety-tracker.onrender.com
 
