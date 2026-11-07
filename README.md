@@ -431,3 +431,4 @@ Sweety enforces validation on **both frontend and backend**:
 ## 📄 License
 
 This project was built for the **Kenpath Junior Full Stack Developer Technical Assessment**.
+

@@ -1,5 +1,26 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+const dotenv = require('dotenv');
+
+// Load environment variables with fallback hierarchy:
+// 1. Root .env.local (generated/updated by neon deploy)
+const rootEnvLocal = path.resolve(__dirname, '../../../.env.local');
+if (fs.existsSync(rootEnvLocal)) {
+  dotenv.config({ path: rootEnvLocal });
+}
+
+// 2. Root .env
+const rootEnv = path.resolve(__dirname, '../../../.env');
+if (fs.existsSync(rootEnv)) {
+  dotenv.config({ path: rootEnv });
+}
+
+// 3. Server .env
+const serverEnv = path.resolve(__dirname, '../../.env');
+if (fs.existsSync(serverEnv)) {
+  dotenv.config({ path: serverEnv });
+}
 
 const connectionString = process.env.DATABASE_URL;
 

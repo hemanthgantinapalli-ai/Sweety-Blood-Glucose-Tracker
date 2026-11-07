@@ -124,3 +124,4 @@ const Navbar = ({ onOpenAddModal }) => {
 };
 
 export default Navbar;
+

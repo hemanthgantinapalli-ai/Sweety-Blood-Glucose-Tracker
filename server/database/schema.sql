@@ -32,3 +32,4 @@ CREATE TABLE IF NOT EXISTS glucose_readings (
 CREATE INDEX IF NOT EXISTS idx_glucose_readings_user_id ON glucose_readings(user_id);
 CREATE INDEX IF NOT EXISTS idx_glucose_readings_reading_date ON glucose_readings(reading_date);
 CREATE INDEX IF NOT EXISTS idx_glucose_readings_user_date ON glucose_readings(user_id, reading_date);
+

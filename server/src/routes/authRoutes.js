@@ -9,3 +9,4 @@ router.post('/login', loginValidation, login);
 router.get('/me', authenticate, getMe);
 
 module.exports = router;
+

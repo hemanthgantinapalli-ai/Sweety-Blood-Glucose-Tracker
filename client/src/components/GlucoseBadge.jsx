@@ -15,3 +15,4 @@ const GlucoseBadge = ({ value, timeSlot = '' }) => {
 };
 
 export default GlucoseBadge;
+

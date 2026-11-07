@@ -23,3 +23,4 @@ router.put('/:id', updateReadingValidation, updateReading);
 router.delete('/:id', deleteReading);
 
 module.exports = router;
+

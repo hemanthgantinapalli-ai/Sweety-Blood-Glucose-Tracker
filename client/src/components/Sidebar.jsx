@@ -97,3 +97,4 @@ const Sidebar = ({ onOpenAddModal }) => {
 };
 
 export default Sidebar;
+
