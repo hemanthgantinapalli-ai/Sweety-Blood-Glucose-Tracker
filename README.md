@@ -428,6 +428,27 @@ Sweety enforces validation on **both frontend and backend**:
 
 ---
 
+## ☁️ Cloud Deployment (Render & Neon)
+
+Sweety is ready for deployment on **Render**:
+
+### Option 1: Automated Deployment via `render.yaml`
+1. Push this repository to GitHub.
+2. In Render, select **Blueprints** and choose your repository.
+3. Render will automatically read [`render.yaml`](file:///c:/Users/heman/OneDrive/Desktop/glucose-tracker/render.yaml) and build both the frontend and backend into a single Web Service.
+4. Set the `DATABASE_URL` environment variable in the Render dashboard to your Neon connection string.
+
+### Option 2: Manual Web Service Setup
+- **Environment**: Node
+- **Build Command**: `npm install --prefix server && npm install --prefix client && npm run build --prefix client`
+- **Start Command**: `node server/src/server.js`
+- **Environment Variables**:
+  - `DATABASE_URL`: `your_neon_connection_string`
+  - `JWT_SECRET`: `your_secure_random_secret`
+  - `NODE_ENV`: `production`
+
+---
+
 ## 📄 License
 
 This project was built for the **Kenpath Junior Full Stack Developer Technical Assessment**.
