@@ -20,6 +20,8 @@
   "author": "Kenpath Candidate",
   "license": "ISC",
   "dependencies": {
+    "@neon/config": "^1.13.0",
+    "@neon/env": "^2.1.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -41,4 +43,3 @@
     "testTimeout": 15000
   }
 }
-

@@ -19,6 +19,21 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Root API welcome endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Welcome to Sweety - Blood Glucose Tracker API',
+    frontend: clientUrl,
+    health: '/api/health',
+    endpoints: {
+      auth: '/api/auth',
+      readings: '/api/readings',
+      reports: '/api/reports',
+    },
+  });
+});
+
 // Health Check
 app.get('/api/health', (req, res) => {
   res.status(200).json({
