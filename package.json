@@ -4,7 +4,7 @@
   "description": "Sweety - Blood Glucose Tracker with Neon PostgreSQL",
   "scripts": {
     "build": "npm run build --prefix client",
-    "start": "node server/src/server.js",
+    "start": "npm start --prefix server",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
     "migrate": "npm run migrate --prefix server",

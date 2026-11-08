@@ -22,24 +22,28 @@ if (fs.existsSync(serverEnv)) {
   dotenv.config({ path: serverEnv });
 }
 
-const connectionString = process.env.DATABASE_URL;
-
-// Determine SSL settings
-// Neon and remote cloud postgres databases require SSL.
-const isNeon = connectionString && (connectionString.includes('neon.tech') || connectionString.includes('sslmode=require'));
 const isProduction = process.env.NODE_ENV === 'production';
 
-const poolConfig = {
-  connectionString,
+const getPoolConfig = (connectionString) => {
+  const isNeon = connectionString && (
+    connectionString.includes('neon.tech') ||
+    connectionString.includes('sslmode=require')
+  );
+  const config = { connectionString };
+
+  if (isNeon || isProduction) {
+    config.ssl = {
+      rejectUnauthorized: false,
+    };
+  }
+
+  return config;
 };
 
-if (isNeon || isProduction) {
-  poolConfig.ssl = {
-    rejectUnauthorized: false,
-  };
-}
-
-const pool = new Pool(poolConfig);
+const pool = new Pool(getPoolConfig(process.env.DATABASE_URL));
+const migrationPool = new Pool(
+  getPoolConfig(process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL)
+);
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle PostgreSQL client:', err.message);
@@ -48,4 +52,5 @@ pool.on('error', (err) => {
 module.exports = {
   query: (text, params) => pool.query(text, params),
   pool,
+  migrationPool,
 };

@@ -7,7 +7,7 @@ services:
     runtime: node
     plan: free
     buildCommand: npm install --prefix server && npm install --prefix client && npm run build --prefix client
-    startCommand: node server/src/server.js
+    startCommand: npm start
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -21,4 +21,3 @@ services:
       # Update this after first deploy with your actual Render URL.
       - key: CLIENT_URL
         value: https://sweety-tracker.onrender.com
-

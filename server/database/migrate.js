@@ -1,41 +1,48 @@
 const fs = require('fs');
 const path = require('path');
-const { pool } = require('../src/config/db');
+const { migrationPool } = require('../src/config/db');
 
 async function runMigration() {
   console.log('🚀 Running database migrations for Sweety...');
   const schemaPath = path.join(__dirname, 'schema.sql');
-  
+
   if (!fs.existsSync(schemaPath)) {
-    console.error(`❌ Schema file not found at: ${schemaPath}`);
-    process.exit(1);
+    throw new Error(`Schema file not found at: ${schemaPath}`);
   }
 
   const sql = fs.readFileSync(schemaPath, 'utf8');
+  let client;
 
   try {
-    const client = await pool.connect();
+    client = await migrationPool.connect();
     console.log('Connected to PostgreSQL successfully.');
-    
+
     await client.query('BEGIN');
     await client.query(sql);
     await client.query('COMMIT');
-    
+
     console.log('✅ Migrations executed successfully! Tables & indexes are ready.');
-    client.release();
-    await pool.end();
-    process.exit(0);
   } catch (err) {
-    console.error('❌ Migration failed:', err.message);
-    if (err.detail) console.error('Detail:', err.detail);
-    await pool.end();
-    process.exit(1);
+    if (client) {
+      try {
+        await client.query('ROLLBACK');
+      } catch (rollbackError) {
+        console.error('❌ Migration rollback failed:', rollbackError.message);
+      }
+    }
+    throw err;
+  } finally {
+    if (client) client.release();
+    await migrationPool.end();
   }
 }
 
 if (require.main === module) {
-  runMigration();
+  runMigration().catch((err) => {
+    console.error('❌ Migration failed:', err.message);
+    if (err.detail) console.error('Detail:', err.detail);
+    process.exitCode = 1;
+  });
 }
 
 module.exports = runMigration;
-

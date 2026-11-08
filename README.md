@@ -255,7 +255,7 @@ npm install
 
 ## 🚀 Database Initialization & Migration
 
-Once your `server/.env` file contains your valid Neon `DATABASE_URL`:
+Once your `server/.env` file contains your valid Neon `DATABASE_URL` (and, if available, `DATABASE_URL_UNPOOLED` for migrations):
 
 ```bash
 cd server
@@ -263,6 +263,8 @@ npm run migrate
 ```
 
 This reads `server/database/schema.sql` and creates the `users` and `glucose_readings` tables, unique constraints, check constraints, and performance indexes automatically.
+
+Production startup runs this idempotent migration before serving requests. Set `DATABASE_URL_UNPOOLED` to Neon’s direct connection string for migrations; if it is not set, the app falls back to `DATABASE_URL`.
 
 ---
 
@@ -441,9 +443,10 @@ Sweety is ready for deployment on **Render**:
 ### Option 2: Manual Web Service Setup
 - **Environment**: Node
 - **Build Command**: `npm install --prefix server && npm install --prefix client && npm run build --prefix client`
-- **Start Command**: `node server/src/server.js`
+- **Start Command**: `npm start`
 - **Environment Variables**:
   - `DATABASE_URL`: `your_neon_connection_string`
+  - `DATABASE_URL_UNPOOLED`: optional direct Neon URL used for migrations
   - `JWT_SECRET`: `your_secure_random_secret`
   - `NODE_ENV`: `production`
 
@@ -452,4 +455,3 @@ Sweety is ready for deployment on **Render**:
 ## 📄 License
 
 This project was built for the **Kenpath Junior Full Stack Developer Technical Assessment**.
-
